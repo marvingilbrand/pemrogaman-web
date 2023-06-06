@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Json Edit Data</title>
+</head>
+<body>
+    
+<div>
+    Nama :
+    <input type="text" id="txNAMA">
+</div>
+<div>
+    Email :
+    <input type="email" id="txEMAIL">
+</div>
+<div>
+    User Name :
+    <input type="text" id="txUSERNAME">
+</div>
+<div>
+   pasword :
+    <input type="text" id="txPASS1">
+</div>
+<div>
+   virifikasi pasword :
+    <input type="text" id="txPASS2">
+</div>
+<button type="button" id="cmdupdate" onclick="updateData()">update </button>
+
+    <script>
+        const qstring = window.location.search;
+
+        const pr = new URLSearchParams(qstring);
+        let prid = pr.get('id');
+
+        const jsHTTP = new XMLHttpRequest();
+        let cx = "https://webpro.ptov.my.id/api/curduser.php?aksi=get&q="+prid;
+        console.log(cx);
+        jsHTTP.open("GET",cx);
+        jsHTTP.send();
+        jsHTTP.onload = function(){
+            const dta = JSON.parse(this.responseText);
+            document.getElementById("txNAMA").value     = dta.isi[0][0];
+            document.getElementById("txEMAIL").value    = dta.isi[0][1];
+            document.getElementById("txUSERNAME").value = dta.isi[0][2];
+            console.log(dta);
+        }
+
+    function updateData(){
+     //alert("tombol apdate data di klick")
+     let nm = document.getElementById("txNAMA").value;
+     let em = document.getElementById("txEMAIL").value;
+     let usr = document.getElementById("txUSERNAME").value;
+     let p1 = document.getElementById("txPASS1").value;
+     let p2 = document.getElementById("txPASS2").value;
+     let params = "nama="+nm+"&email="+"&username="+usr+"pass="+p1;
+     console.log("parameter : "+params);
+     let cx = "https://webpro.ptov.my.id/api/curduser.php?aksi=update";
+     const jsHTTP = new XMLHttpRequest();
+     jsHTTP.open("POST",cx, true);
+     jsHTTP.setRequestHeader("content-type","application/x-www-form-urlencoded");
+     jsHTTP.send(params);
+
+     jsHTTP.onload = function(){
+        const  data = JSON.parse(this.responseText)
+        console.log(data);
+     }
+}
+        //console.log(prid); 
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Data | Javascript</title>
+</head>
+
+<body>
+
+    <center>
+        <div class="container">
+            <h3>Form Data</h3>
+            <table>
+                <tr>
+                    <td>Nama</td>
+                    <td> : <input type="text" id="nama"></td>
+                </tr>
+                <tr>         
+                    <td>Email</td>
+                    <td> : <input type="email" id="email"></td>
+                </tr>
+                <tr>         
+                    <td>Username</td>
+                    <td> : <input type="text" id="username"></td>
+                </tr>
+                <tr>         
+                    <td>ID User</td>
+                    <td> : <input type="text" id="iduser"></td>
+                </tr>
+                <tr>
+                    <td><br><button type="submit" class="btn">Tambah</button></td>
+                </tr>
+            </table>
+        </div>
+    </center>
+
+    <br><br>
+    <hr>
+    <br><br>
+    
+    <div id="TampilData"></div>
+        
+    
+<!-- javascript -->
+<script>
+    const jsHTTP = new XMLHttpRequest();
+    jsHTTP.open("GET", "https://webpro.ptov.my.id/api/curduser.php?aksi=get");
+    jsHTTP.send();
+
+    jsHTTP.onload = function() {
+        const data = JSON.parse(this.responseText);
+        console.log(data);
+        
+        let tx = "<center><h3>List Data</h3></center>";
+        tx += "<center><table border='1' cellspacing='0' cellpadding='7'><tr><th>#</th><th>Nama</th><th>Email</th><th>Username</th><th>Aksi</th></tr></center>";
+        
+        let no = 1;
+        for(let i=0; i<data.affected; i++) {
+            tx += "<tr>"
+                tx += "<td>"+ no +"</td>";
+                tx += "<td>"+ data.isi[i][0] +"</td>";
+                tx += "<td>"+ data.isi[i][1] +"</td>";
+                tx += "<td>"+ data.isi[i][2] +"</td>";
+                tx += "<td><button><a href='edit.html?id="+ data.isi[i][3] +"'>Edit</a></button> <button><a href='hapus.html?id="+ data.isi[i][3] +"'>Hapus</a></button></td>";
+            tx += "</tr>";
+            no++;
+        }
+        tx += "</table>";
+
+        document.getElementById("TampilData").innerHTML = tx;
+
+    }
+</script>
+
+</body>
+</html>
